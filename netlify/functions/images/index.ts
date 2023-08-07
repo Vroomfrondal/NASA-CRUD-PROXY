@@ -17,7 +17,7 @@ import axios from 'axios'
 import url from 'url'
 require('dotenv').config()
 
-export const imageRoute = Router()
+const imageRoute = Router()
 
 imageRoute.get('/images', async (req, res) => {
   const URL = process.env.NASA_BASE_URL!
@@ -45,4 +45,5 @@ imageRoute.get('/images', async (req, res) => {
   }
 })
 
-module.exports = imageRoute
+// module.exports.handler = imageRoute
+export default imageRoute
