@@ -4,8 +4,9 @@
   "description": "A proxy server for handling HTTP requests on the NASA-CRUD-Gallery Front-End",
   "main": "src/app.ts",
   "scripts": {
-    "start": "npx nodemon",
-    "build": "netlify build"
+    "start:express": "npx nodemon",
+    "netlify:build": "sudo netlify build",
+    "netlify:serve": "sudo netlify serve"
   },
   "keywords": [],
   "author": "",
@@ -19,7 +20,8 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-rate-limit": "^6.9.0",
-    "ky": "^0.33.3"
+    "ky": "^0.33.3",
+    "serverless-http": "^3.2.0"
   },
   "devDependencies": {
     "@types/apicache": "^1.6.2",
