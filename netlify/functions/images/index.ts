@@ -38,7 +38,7 @@ const handler: Handler = async (event: HandlerEvent, context: HandlerContext) =>
   return {
     statusCode: 200,
     body: JSON.stringify({
-      value: event,
+      value: context,
     }),
   }
 }
