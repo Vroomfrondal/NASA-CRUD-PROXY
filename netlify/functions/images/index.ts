@@ -1,13 +1,9 @@
 // serverless function for fetching NASA images
 import { Router } from 'express'
+import type { Handler, HandlerEvent, HandlerContext } from '@netlify/functions'
 import axios from 'axios'
 import url from 'url'
 require('dotenv').config()
-
-// export default imageRoute
-// export const handler = imageRoute
-
-import type { Handler, HandlerEvent, HandlerContext } from '@netlify/functions'
 
 const handler: Handler = async (event: HandlerEvent, context: HandlerContext) => {
   // your server-side functionality
@@ -41,7 +37,7 @@ const handler: Handler = async (event: HandlerEvent, context: HandlerContext) =>
 
   return {
     statusCode: 200,
-    body: 'some value',
+    body: JSON.stringify(imageRoute),
   }
 }
 
