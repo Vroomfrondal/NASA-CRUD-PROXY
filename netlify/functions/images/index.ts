@@ -1,17 +1,5 @@
 // serverless function for fetching NASA images
 
-// import express, { Router } from 'express';
-// import serverless from 'serverless-http';
-
-// const api = express();
-
-// const router = Router();
-// router.get('/hello', (req, res) => res.send('Hello World!'));
-
-// api.use('/api/', router);
-
-// export const handler = serverless(api);
-/////////////////////////////////////////////
 import { Router } from 'express'
 import axios from 'axios'
 import url from 'url'
@@ -45,5 +33,5 @@ imageRoute.get('/images', async (req, res) => {
   }
 })
 
-// module.exports.handler = imageRoute
-export default imageRoute
+// export default imageRoute
+export const handler = imageRoute
