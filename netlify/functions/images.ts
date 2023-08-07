@@ -1,11 +1,15 @@
-import { Router } from 'express'
+import express, { Router } from 'express'
+import serverless from 'serverless-http'
 import axios from 'axios'
 import url from 'url'
-require('dotenv').config()
 
-export const imageRoute = Router()
+// Init Server
+const app = express()
+const imageRouter = Router()
 
-imageRoute.get('/images', async (req, res) => {
+// Routes
+// For example use baseUrl/images?start_date=2022-10-26&end_date=2022-11-9
+imageRouter.get('/', async (req, res) => {
   const URL = process.env.NASA_BASE_URL!
   const KEY = process.env.NASA_API_KEY!
 
@@ -30,3 +34,8 @@ imageRoute.get('/images', async (req, res) => {
     res.status(500).json({ err })
   }
 })
+
+// Start Server
+app.use('/images/', imageRouter)
+
+export const handler = serverless(app)
