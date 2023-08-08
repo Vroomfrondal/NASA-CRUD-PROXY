@@ -1,4 +1,5 @@
 import express, { Router } from 'express'
+import { rateLimit } from 'express-rate-limit'
 import serverless from 'serverless-http'
 import axios from 'axios'
 import url from 'url'
@@ -8,6 +9,14 @@ import cors from 'cors'
 const app = express()
 const imageRouter = Router()
 app.use(cors())
+
+// Rate Limiting Middleware
+const limiter = rateLimit({
+  windowMs: 1 * 3600000, // 1 hour window for requests
+  max: 200, // max requests
+})
+app.use(limiter)
+app.set('Trust Proxy', 1)
 
 // Routes
 // For example use baseUrl/images?start_date=2022-10-26&end_date=2022-11-9
