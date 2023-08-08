@@ -1,11 +1,26 @@
-import { Router } from 'express'
+import express, { Router } from 'express'
+import { rateLimit } from 'express-rate-limit'
+import serverless from 'serverless-http'
 import axios from 'axios'
 import url from 'url'
-require('dotenv').config()
+import cors from 'cors'
 
-export const imageRoute = Router()
+// Init Server
+const app = express()
+const imageRouter = Router()
+app.use(cors())
 
-imageRoute.get('/images', async (req, res) => {
+//! Rate Limiting Middleware
+const limiter = rateLimit({
+  windowMs: 1 * 3600000, // 1 hour window for requests
+  max: 200, // max requests
+})
+app.use(limiter)
+app.set('Trust Proxy', 1)
+
+// Routes
+// For example use baseUrl/images?start_date=2022-10-26&end_date=2022-11-9
+imageRouter.get('/', async (req, res) => {
   const URL = process.env.NASA_BASE_URL!
   const KEY = process.env.NASA_API_KEY!
 
@@ -30,3 +45,8 @@ imageRoute.get('/images', async (req, res) => {
     res.status(500).json({ err })
   }
 })
+
+// Start Server
+app.use('/images/', imageRouter)
+
+export const handler = serverless(app)

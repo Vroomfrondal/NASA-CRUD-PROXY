@@ -7,6 +7,9 @@ require('dotenv').config()
 const PORT = process.env.PORT || 5000
 const app = express()
 
+// Enable Cors
+app.use(cors())
+
 // Rate Limiting Middleware
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // window for requests
@@ -22,9 +25,6 @@ app.use(express.static('public'))
 
 // Import Routes
 app.use('/', routes)
-
-// Enable Cors
-app.use(cors())
 
 // Start Proxy
 app.listen(PORT, () => {
