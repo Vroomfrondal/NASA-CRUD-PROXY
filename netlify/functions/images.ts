@@ -10,7 +10,7 @@ const app = express()
 const imageRouter = Router()
 app.use(cors())
 
-// Rate Limiting Middleware
+//! Rate Limiting Middleware
 const limiter = rateLimit({
   windowMs: 1 * 3600000, // 1 hour window for requests
   max: 200, // max requests
