@@ -3,6 +3,6 @@
   node_bundler = "esbuild"
 [[redirects]]
   force = true
-  from = "/images/*"
+  from = "/nasa/*"
   status = 200
-  to = "/.netlify/functions/images/:splat"
+  to = "/.netlify/functions/nasa/:splat"
