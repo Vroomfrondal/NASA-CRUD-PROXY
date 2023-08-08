@@ -2,10 +2,12 @@ import express, { Router } from 'express'
 import serverless from 'serverless-http'
 import axios from 'axios'
 import url from 'url'
+import cors from 'cors'
 
 // Init Server
 const app = express()
 const imageRouter = Router()
+app.use(cors())
 
 // Routes
 // For example use baseUrl/images?start_date=2022-10-26&end_date=2022-11-9
