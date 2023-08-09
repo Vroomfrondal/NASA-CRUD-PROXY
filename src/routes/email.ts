@@ -1,74 +1,16 @@
-import express, { Router } from 'express'
-import { rateLimit } from 'express-rate-limit'
-import serverless from 'serverless-http'
+import { Router } from 'express'
 import axios from 'axios'
 import axiosRetry from 'axios-retry'
-import url from 'url'
-import cors from 'cors'
-
 require('dotenv').config()
 
-// Init Server
-const app = express()
-const router = Router()
+export const emailRoute = Router()
 
-// Enable cors
-app.use(cors())
-
-//! Rate Limiting Middleware
-const limiter = rateLimit({
-  windowMs: 24 * 3600000, // 4k limit per day per user
-  max: 4000,
-})
-app.use(limiter)
-app.set('Trust Proxy', 1)
-
-// Routes
-// baseUrl/nasa?start_date=2022-10-26&end_date=2022-11-9
-router.get('/', async (req, res) => {
-  const URL = process.env.NASA_BASE_URL!
-  const KEY = process.env.NASA_API_KEY!
-
-  try {
-    const dynamicURLParams = url.parse(req.url, true).query
-    console.log(dynamicURLParams)
-
-    const CONFIG = {
-      params: { api_key: KEY, start_date: dynamicURLParams.start_date, end_date: dynamicURLParams.end_date },
-    }
-    const request = await axios.get(URL, CONFIG)
-
-    if (request.status === 200) {
-      const response = await request.data.reverse() // reversing so today's image shows first
-
-      res.status(200).json(response)
-    } else {
-      res.status(400).json({ err: `Failed with status code: ${request.status}, Text: ${request.statusText}` })
-    }
-  } catch (err: any) {
-    console.log(err)
-    res.status(500).json({ err })
-  }
-})
-
-// baseUrl/nasa/email/:user_email
-router.get('/email/:user_email', async (req, res) => {
+// baseUrl/email/your_email_here
+emailRoute.get('/email/:user_email', async (req, res) => {
   const URL = process.env.EMAIL_URL!
   const SENDER = process.env.SENDER!
   const RECIEVER = req.params.user_email
   const KEY = process.env.EMAIL_API_KEY!
-  let pdf = ''
-  // const base64Data = Buffer.from('some valued string').toString('base64')
-  // const base64Data = btoa('some valued string')
-
-  try {
-    const PDF_URL = 'https://drive.google.com/file/d/1szO26knw8shxE1xWueHXWGdb4AUHU950/view?usp=sharing'
-    const response = await axios.get(PDF_URL, { responseType: 'arraybuffer' })
-    const base64String = Buffer.from(response.data, 'binary').toString('base64')
-    pdf = base64String
-  } catch (error) {
-    console.log(error)
-  }
 
   const CONFIG = {
     headers: { Authorization: KEY, 'Content-Type': 'application/json' },
@@ -83,7 +25,7 @@ router.get('/email/:user_email', async (req, res) => {
       ],
       attachments: [
         {
-          content: pdf,
+          content: '',
           filename: 'test.pdf',
           type: 'application/pdf', // 'text/plain' 'text/csv',
           disposition: 'attachment',
@@ -135,8 +77,3 @@ router.get('/email/:user_email', async (req, res) => {
   if (request.status === 202) res.status(200).json({ status: 200, message: `Email sent to ${SENDER}` })
   else res.status(400).json({ status: 400, message: 'Email encountered an issue.' })
 })
-
-// Start Server
-app.use('/nasa/', router)
-
-export const handler = serverless(app)
