@@ -5,7 +5,7 @@ require('dotenv').config()
 
 export const imageRoute = Router()
 
-imageRoute.get('/images', async (req, res) => {
+imageRoute.get('/nasa', async (req, res) => {
   const URL = process.env.NASA_BASE_URL!
   const KEY = process.env.NASA_API_KEY!
 
