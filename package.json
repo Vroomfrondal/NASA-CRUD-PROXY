@@ -4,8 +4,9 @@
   "description": "A proxy server for handling HTTP requests on the NASA-CRUD-Gallery Front-End",
   "main": "src/app.ts",
   "scripts": {
-    "start": "ts-node src/app.ts",
-    "start:dev": "nodemon src/app.ts"
+    "start:dev": "nodemon src/app.ts",
+    "start:prod": "node dist/app.js",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
