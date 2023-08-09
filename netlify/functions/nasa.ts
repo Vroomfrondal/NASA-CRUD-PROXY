@@ -11,6 +11,8 @@ require('dotenv').config()
 // Init Server
 const app = express()
 const router = Router()
+
+// Enable cors
 app.use(cors())
 
 //! Rate Limiting Middleware
@@ -49,12 +51,24 @@ router.get('/', async (req, res) => {
   }
 })
 
-// baseUrl/nasa/email
+// baseUrl/nasa/email/:user_email
 router.get('/email/:user_email', async (req, res) => {
   const URL = process.env.EMAIL_URL!
   const SENDER = process.env.SENDER!
-  const KEY = process.env.EMAIL_API_KEY!
   const RECIEVER = req.params.user_email
+  const KEY = process.env.EMAIL_API_KEY!
+  let pdf = ''
+  // const base64Data = Buffer.from('some valued string').toString('base64')
+  // const base64Data = btoa('some valued string')
+
+  try {
+    const PDF_URL = 'https://drive.google.com/file/d/1szO26knw8shxE1xWueHXWGdb4AUHU950/view?usp=sharing'
+    const response = await axios.get(PDF_URL, { responseType: 'arraybuffer' })
+    const base64String = Buffer.from(response.data, 'binary').toString('base64')
+    pdf = base64String
+  } catch (error) {
+    console.log(error)
+  }
 
   const CONFIG = {
     headers: { Authorization: KEY, 'Content-Type': 'application/json' },
@@ -69,9 +83,9 @@ router.get('/email/:user_email', async (req, res) => {
       ],
       attachments: [
         {
-          content: '',
-          filename: '60-Years-Nasa-Spaceflight.pdf',
-          type: 'application/pdf',
+          content: pdf,
+          filename: 'test.pdf',
+          type: 'application/pdf', // 'text/plain' 'text/csv',
           disposition: 'attachment',
         },
       ],
@@ -95,7 +109,7 @@ router.get('/email/:user_email', async (req, res) => {
                         Your request was successful, and the PDF pamphlet is attached to this email. Please feel free to reach out if you have any questions or further inquiries using my email cjdeleon98@gmail.com.
                     </p>
                     <p style="font-family: Arial, sans-serif; font-size: 16px; line-height: 20px; color: #333333;">
-                        Thank you for your continued support and curiosity about space exploration!
+                        Thank you for your continued support and curiosity about space exploration! <b>Your email will not be saved or subscribed in anyway</b>.
                     </p>
                     <p style="font-family: Arial, sans-serif; font-size: 16px; line-height: 20px; color: #333333; margin-top: 20px;">
                         Best regards,<br>
@@ -118,8 +132,8 @@ router.get('/email/:user_email', async (req, res) => {
 
   // Email Request
   const request = await axios.post(URL, CONFIG.data, CONFIG)
-  if (request.status === 202) res.status(200).json({ status: 200, message: 'Email sent' })
-  else res.status(400).json({ status: 200, message: 'Email encountered an issue.' })
+  if (request.status === 202) res.status(200).json({ status: 200, message: `Email sent to ${SENDER}` })
+  else res.status(400).json({ status: 400, message: 'Email encountered an issue.' })
 })
 
 // Start Server
