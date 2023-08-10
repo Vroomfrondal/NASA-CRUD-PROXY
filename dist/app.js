@@ -14,8 +14,8 @@ const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 // Rate Limiting Middleware
 const limiter = (0, express_rate_limit_1.rateLimit)({
-    windowMs: 15 * 60 * 1000,
-    max: 100,
+    windowMs: 6 * 3600000,
+    max: 10,
     standardHeaders: true,
     legacyHeaders: false,
 });

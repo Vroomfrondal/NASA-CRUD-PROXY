@@ -18,6 +18,7 @@ const axios_1 = __importDefault(require("axios"));
 const url_1 = __importDefault(require("url"));
 require('dotenv').config();
 exports.imageRoute = (0, express_1.Router)();
+// baseUrl/nasa?start_date=2022-10-26&end_date=2022-11-9
 exports.imageRoute.get('/nasa', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const URL = process.env.NASA_BASE_URL;
     const KEY = process.env.NASA_API_KEY;

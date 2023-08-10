@@ -16,6 +16,7 @@ exports.emailRoute = void 0;
 const express_1 = require("express");
 const axios_1 = __importDefault(require("axios"));
 const axios_retry_1 = __importDefault(require("axios-retry"));
+const fs_1 = __importDefault(require("fs"));
 require('dotenv').config();
 exports.emailRoute = (0, express_1.Router)();
 // baseUrl/email/your_email_here
@@ -24,6 +25,8 @@ exports.emailRoute.get('/email/:user_email', (req, res) => __awaiter(void 0, voi
     const SENDER = process.env.SENDER;
     const RECIEVER = req.params.user_email;
     const KEY = process.env.EMAIL_API_KEY;
+    const pathToAttachment = `${__dirname}/media/NASA_NEWS.pdf`;
+    const attachment = fs_1.default.readFileSync(pathToAttachment).toString('base64');
     const CONFIG = {
         headers: { Authorization: KEY, 'Content-Type': 'application/json' },
         data: {
@@ -37,7 +40,7 @@ exports.emailRoute.get('/email/:user_email', (req, res) => __awaiter(void 0, voi
             ],
             attachments: [
                 {
-                    content: '',
+                    content: attachment,
                     filename: 'test.pdf',
                     type: 'application/pdf',
                     disposition: 'attachment',
