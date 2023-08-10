@@ -79,6 +79,6 @@ emailRoute.get('/email/:user_email', async (req, res) => {
   // Email Request
   const request = await axios.post(URL, CONFIG.data, CONFIG)
 
-  if (request.status === 202) res.status(200).json({ status: 200, message: `Email sent to ${SENDER}` })
+  if (request.status === 202) res.status(200).json({ status: 200, message: `Email sent to ${RECIEVER}` })
   else res.status(400).json({ status: 400, message: 'Email encountered an issue.' })
 })
