@@ -88,7 +88,7 @@ exports.emailRoute.get('/email/:user_email', (req, res) => __awaiter(void 0, voi
     // Email Request
     const request = yield axios_1.default.post(URL, CONFIG.data, CONFIG);
     if (request.status === 202)
-        res.status(200).json({ status: 200, message: `Email sent to ${SENDER}` });
+        res.status(200).json({ status: 200, message: `Email sent to ${RECIEVER}` });
     else
         res.status(400).json({ status: 400, message: 'Email encountered an issue.' });
 }));
