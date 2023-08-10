@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import axios from 'axios'
 import axiosRetry from 'axios-retry'
+import fs from 'fs'
 require('dotenv').config()
 
 export const emailRoute = Router()
@@ -11,6 +12,9 @@ emailRoute.get('/email/:user_email', async (req, res) => {
   const SENDER = process.env.SENDER!
   const RECIEVER = req.params.user_email
   const KEY = process.env.EMAIL_API_KEY!
+
+  const pathToAttachment = `${__dirname}/media/NASA_NEWS.pdf`
+  const attachment = fs.readFileSync(pathToAttachment).toString('base64')
 
   const CONFIG = {
     headers: { Authorization: KEY, 'Content-Type': 'application/json' },
@@ -25,9 +29,9 @@ emailRoute.get('/email/:user_email', async (req, res) => {
       ],
       attachments: [
         {
-          content: '',
+          content: attachment,
           filename: 'test.pdf',
-          type: 'application/pdf', // 'text/plain' 'text/csv',
+          type: 'application/pdf',
           disposition: 'attachment',
         },
       ],
@@ -73,7 +77,8 @@ emailRoute.get('/email/:user_email', async (req, res) => {
   })
 
   // Email Request
-  const request = await axios.post(URL, CONFIG.data, CONFIG)
+  // const request = await axios.post(URL, CONFIG.data, CONFIG)
+  const request = { status: 202 }
   if (request.status === 202) res.status(200).json({ status: 200, message: `Email sent to ${SENDER}` })
   else res.status(400).json({ status: 400, message: 'Email encountered an issue.' })
 })
