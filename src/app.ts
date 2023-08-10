@@ -12,8 +12,8 @@ app.use(cors())
 
 // Rate Limiting Middleware
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // window for requests
-  max: 2, // max requests
+  windowMs: 6 * 3600000, // hour * 1d in ms
+  max: 10, // max requests
   standardHeaders: true,
   legacyHeaders: false,
 })
